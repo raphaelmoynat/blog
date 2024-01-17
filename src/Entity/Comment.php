@@ -4,6 +4,7 @@ namespace App\Entity;
 
 
 use App\Repository\CommentRepository;
+use App\Repository\UserRepository;
 use Core\Attributes\Table;
 use Core\Attributes\TargetEntity;
 use Core\Attributes\TargetRepository;
@@ -15,6 +16,8 @@ class Comment
     private int $id;
     private string $content;
     private int $article_id;
+
+    private int $user_id;
 
     public function getId(): int
     {
@@ -39,5 +42,26 @@ class Comment
     public function setArticleId(int $article_id): void
     {
         $this->article_id = $article_id;
+    }
+
+    public function getAuthor(): User
+    {
+        $userRepository = new UserRepository();
+        return $userRepository->find($this->user_id);
+    }
+
+    public function getUserId(): int
+    {
+        return $this->user_id;
+    }
+
+    public function setUserId(int $user_id): void
+    {
+        $this->user_id = $user_id;
+    }
+
+    public function setAuthor(User $user)
+    {
+        $this->user_id = $user->getId();
     }
 }
