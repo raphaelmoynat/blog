@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Repository\UserRepository;
 use Core\Controller\Controller;
 use Core\Http\Response;
+use Core\Session\Session;
 
 class SecurityController extends Controller
 {
@@ -62,12 +63,12 @@ class SecurityController extends Controller
             if (!$user) {
 
                 $this->addFlash("nom d'utilisateur inconnu", "danger");
-                return $this->redirect("?type=security&action=signIn");
+                return $this->redirect("?type=security&action=login");
             }
 
             if (!$user->logIn($unencryptedPassword)) {
                 $this->addFlash("mot de passe incorrect ", "danger");
-                return $this->redirect("?type=security&action=signIn");
+                return $this->redirect("?type=security&action=login");
             }
 
 
@@ -83,5 +84,14 @@ class SecurityController extends Controller
             "pageTitle"=> "Connexion"
         ]);
     }
+
+    public function signOut():Response
+    {
+        Session::remove("user");
+        $this->addFlash("utilisateur déconnecté", "secondary");
+        return $this->redirect("?type=article&action=index");
+    }
+
+
 
 }

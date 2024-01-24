@@ -39,6 +39,11 @@ class CommentController extends \Core\Controller\Controller
 
     public function create():Response
     {
+        if(!$this->getUser()){
+
+            $this->addFlash("connecte toi d'abord coco", "warning");
+            return  $this->redirect("?type=article&action=index");
+        }
 
         $articleId = null;
         $content = null;
@@ -62,6 +67,7 @@ class CommentController extends \Core\Controller\Controller
             $comment = new Comment();
             $comment->setContent($content);
             $comment->setArticleId($articleId);
+            $comment->setAuthor($this->getUser());
 
             $commentRepository = new CommentRepository();
             $commentRepository->save($comment);

@@ -1,6 +1,7 @@
 <?php
 
 use Core\Session\Flash;
+use Core\Session\Session;
 
 ?>
 <!doctype html>
@@ -24,8 +25,25 @@ use Core\Session\Flash;
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="/">Home</a>
+                    <a class="nav-link active" aria-current="page" href="?type=article&action=index">Articles</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="?type=article&action=create">Nouvel Article</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="?type=security&action=register">S'inscrire</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="?type=security&action=login">Se connecter</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="?type=security&action=signOut">Sign Out</a>
+                </li>
+                <?php if(Session::userConnected()) { ?>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Salut <?= Session::user()['authenticator'] ?> </a>
+                    </li>
+                <?php } ?>
 
 
             </ul>

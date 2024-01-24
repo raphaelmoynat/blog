@@ -4,6 +4,7 @@ namespace App\Controller;
 
 
 
+use App\Entity\User;
 use App\Repository\ArticleRepository;
 use App\Entity\Article;
 use Core\Http\Response;
@@ -51,15 +52,31 @@ class ArticleController extends \Core\Controller\Controller
 
     public function delete():Response
     {
+        if(!$this->getUser()){
+
+            $this->addFlash("impossible", "warning");
+            return  $this->redirect("?type=article&action=index");
+        }
+
         $id = null;
+        $user_id = null;
 
         if(!empty($_GET['id']) && ctype_digit($_GET['id'])){
             $id = $_GET['id'];
         }
 
+        if(!empty($_GET['userid']) && ctype_digit($_GET['userid'])){
+            $user_id = $_GET['userid'];
+        }
+
+        if(!$user_id){
+            return  $this->redirect();
+        }
+
         if(!$id){
             return  $this->redirect();
         }
+
 
         $articleRepository = new ArticleRepository();
         $article = $articleRepository->find($id);
@@ -75,6 +92,12 @@ class ArticleController extends \Core\Controller\Controller
 
     public function create():Response
     {
+        if(!$this->getUser()){
+
+            $this->addFlash("connecte toi d'abord coco", "warning");
+            return  $this->redirect("?type=article&action=index");
+        }
+
         $title = null;
         $content = null;
 
@@ -86,6 +109,8 @@ class ArticleController extends \Core\Controller\Controller
             $content = $_POST['content'];
         }
 
+
+
         if($title && $content)
         {
 
@@ -93,12 +118,13 @@ class ArticleController extends \Core\Controller\Controller
 
         $article->setTitle($title);
         $article->setContent($content);
+        $article->setAuthor($this->getUser());
 
         $articleRepository = new ArticleRepository();
 
         $article =  $articleRepository->save($article);
 
-        return $this->redirect("?type=article&action=index");
+        return $this->redirect("?type=article&action=show&id=".$article->getId());
 
 
     }

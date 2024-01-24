@@ -57,6 +57,11 @@ class Article
         return $userRepository->find($this->user_id);
     }
 
+    public function setAuthor(User $user)
+    {
+        $this->user_id = $user->getId();
+    }
+
     public function getUserId(): int
     {
         return $this->user_id;
@@ -68,9 +73,6 @@ class Article
         $this->user_id = $user_id;
     }
 
-    public function setAuthor(User $user)
-    {
-        $this->user_id = $user->getId();
-    }
+
 
 }

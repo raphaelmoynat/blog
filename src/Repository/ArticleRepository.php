@@ -13,10 +13,11 @@ class ArticleRepository extends Repository
 
     public function save(Article $article)
     {
-        $query = $this->pdo->prepare("INSERT INTO $this->tableName SET title = :title, content = :content");
+        $query = $this->pdo->prepare("INSERT INTO $this->tableName SET title = :title, content = :content, user_id= :user_id");
         $query->execute([
             "title"=>$article->getTitle(),
-            "content"=>$article->getContent()
+            "content"=>$article->getContent(),
+            "user_id"=>$article->getUserId(),
         ]);
 
         return $this->find($this->pdo->lastInsertId());
